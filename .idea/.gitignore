@@ -1,0 +1,33 @@
+# IDE
+.idea/
+.vscode/
+
+# OS/Editor
+.DS_Store
+*.swp
+
+# Editor-based HTTP Client requests
+httpRequests/
+
+# Datasource local storage
+dataSources/
+dataSources.local.xml
+
+# Project config
+shelf/
+workspace.xml
+
+# Binaries
+banner-rotator
+
+# Logs
+*.log
+
+# Env config
+.env
+
+# Vendor (если используешь)
+vendor/
+
+# Test output
+coverage.out
