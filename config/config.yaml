@@ -1,0 +1,21 @@
+# HTTP
+http_port: "8080"
+
+# Postgres
+postgres:
+  host: "postgres"
+  port: 5432
+  user: "postgres"
+  password: "postgres"
+  dbname: "bannerdb"
+  sslmode: "disable"
+  timeout: 5s
+
+# Kafka
+kafka:
+  brokers:
+    - "kafka:9092"
+  topic: "banner-events"
+
+# Logging
+log_level: "debug"
