@@ -1,0 +1,22 @@
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+*.swp
+
+# Env
+.env
+
+# Logs
+*.log
+
+# Build
+/banner-rotator
+
+# Vendor
+vendor/
+
+# Test output
+coverage.out
