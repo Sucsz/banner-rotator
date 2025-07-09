@@ -1,21 +1,21 @@
 # HTTP
 http_port: "8080"
 
-# Postgres
+# Logging
+log_level: "debug"
+
+# PostgreSQL
 postgres:
-  host: "postgres"
+  host: "postgres"       # внутри Docker — имя сервиса, для локалки можно переопределить ENV на localhost
   port: 5432
   user: "postgres"
   password: "postgres"
-  dbname: "bannerdb"
+  dbname: "bannerdb"     # имя базы по умолчанию
   sslmode: "disable"
-  timeout: 5s
+  timeout: 5s            # таймаут подключения
 
 # Kafka
 kafka:
   brokers:
-    - "kafka:9092"
-  topic: "banner-events"
-
-# Logging
-log_level: "debug"
+    - "kafka:9092"       # внутри Docker — адрес брокера
+  topic: "banner-events" # Kafka-топик для событий баннера

@@ -17,6 +17,15 @@ restart:
 	$(MAKE) stop
 	$(MAKE) run
 
+## Пересобирает образ приложения без кэша
+rebuild:
+	$(DOCKER_COMPOSE) build --no-cache app
+
+## Пересобирает образ и перезапускает сервисы
+full-restart:
+	$(MAKE) rebuild
+	$(MAKE) restart
+
 ## Показывает логи всех контейнеров
 logs:
 	$(DOCKER_COMPOSE) logs -f
@@ -29,6 +38,13 @@ build:
 test:
 	go test -race -count=1 ./...
 
+## Локальный запуск приложения с загрузкой ENV из .env
+local:
+	bash -c '\
+	  set -o allexport; source $(ENV_FILE); set +o allexport; \
+	  export APP_POSTGRES_HOST=localhost APP_KAFKA_BROKERS=localhost:9092; \
+	  go run $(MAIN_FILE) \
+	'
 ## Запускает golangci-lint
 lint:
 	golangci-lint run ./...

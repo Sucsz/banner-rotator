@@ -1,23 +1,37 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"os"
+
 	"github.com/Sucsz/banner-rotator/config"
 	"github.com/Sucsz/banner-rotator/internal/log"
+	"github.com/Sucsz/banner-rotator/pkg/postgres"
 )
 
 func main() {
-	// Дефолтный лог
-	log.Init("info")
-
+	// Загружаем конфигурацию
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		log.WithComponent("main").Fatal().Err(err).
-			Msg("Failed to load config")
+		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
+		os.Exit(1)
 	}
 
-	// Лог из конфига
+	// Инициализируем логгер
 	log.Init(cfg.LogLevel)
-	log.WithComponent("main").Info().
-		Msgf("Service starting on port %s (log level=%s)", cfg.HTTPPort, cfg.LogLevel)
-	// далее: connect to DB, Kafka, запустить HTTP-сервер и т.д.
+	logger := log.WithComponent("main")
+	logger.Info().
+		Msgf("Service starting on port %s (log level = %s).", cfg.HTTPPort, cfg.LogLevel)
+
+	// Подключаемся к PostgreSQL
+	conn, err := postgres.Init(cfg.Postgres)
+	if err != nil {
+		logger.Fatal().Err(err).
+			Msg("Failed to initialize PostgreSQL.")
+	}
+	// Гарантированно закроем соединение при выходе
+	defer postgres.Close(context.Background(), conn)
+
+	// TODO: здесь будет запуск HTTP-сервера и остальных компонентов
 }
