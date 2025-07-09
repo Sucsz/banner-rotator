@@ -1,40 +1,40 @@
 package log
 
 import (
-	"context"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
-// Init Конфигурирует Zerolog Global Logger на основе предоставленного уровня.
+var baseLogger zerolog.Logger
+
+// Init конфигурирует глобальный zerolog.Logger по уровню level.
 func Init(level string) {
-	// Set timestamp format to RFC3339
 	zerolog.TimeFieldFormat = time.RFC3339
 
-	// форматируем JSON-лог в человекочитаемый вид в консоль
 	console := zerolog.ConsoleWriter{
 		Out:        os.Stdout,
 		TimeFormat: time.RFC3339,
 	}
-	log.Logger = log.Output(console)
 
-	// Используем переданный уровень логирования(из конфига)
-	lvl, err := zerolog.ParseLevel(level)
-	// Если передали что-то не то, то оставляем дефолтный уровень инфо
+	lvl, err := zerolog.ParseLevel(strings.ToLower(level))
 	if err != nil {
-		log.Warn().Err(err).Msg("Invalid log level, defaulting to info")
+		// здесь можно использовать log.Logger, хотя он ещё не переназначен – это мелочь
+		log.Warn().Err(err).Msg("Invalid log level, defaulting to info.")
 		lvl = zerolog.InfoLevel
 	}
 	zerolog.SetGlobalLevel(lvl)
+
+	baseLogger = zerolog.New(console).With().Timestamp().Logger()
+	log.Logger = baseLogger
 }
 
-// WithComponent позволяет создавать контекстные логгеры для каждого модуля для упрощения фильтрации по компонентам
+// WithComponent создаёт новый логгер с полем component и возвращает указатель на него,
+// чтобы можно было вызывать методы Fatal(), Error(), Info() и т.д.
 func WithComponent(name string) *zerolog.Logger {
-	logger := zerolog.Ctx(context.Background()).With().
-		Str("component", name).
-		Logger()
-	return &logger
+	l := baseLogger.With().Str("component", name).Logger()
+	return &l
 }
