@@ -1,15 +1,25 @@
 services:
   app:
     build: .
-    depends_on:
-      - postgres
-      - kafka
     container_name: banner-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
     command: ["./banner-rotator"]
     environment:
       - APP_HTTP_PORT=${APP_HTTP_PORT}
       - APP_LOG_LEVEL=${APP_LOG_LEVEL}
-      - KAFKA_BROKERS=${KAFKA_BROKERS}
+      - APP_POSTGRES_HOST=${APP_POSTGRES_HOST}
+      - APP_POSTGRES_PORT=${APP_POSTGRES_PORT}
+      - APP_POSTGRES_USER=${APP_POSTGRES_USER}
+      - APP_POSTGRES_PASSWORD=${APP_POSTGRES_PASSWORD}
+      - APP_POSTGRES_DBNAME=${APP_POSTGRES_DBNAME}
+      - APP_POSTGRES_SSLMODE=${APP_POSTGRES_SSLMODE}
+      - APP_POSTGRES_TIMEOUT=${APP_POSTGRES_TIMEOUT}
+      - APP_KAFKA_BROKERS=${APP_KAFKA_BROKERS}
+      - APP_KAFKA_TOPIC=${APP_KAFKA_TOPIC}
     ports:
       - "${HOST_HTTP_PORT}:${APP_HTTP_PORT}"
 
@@ -25,6 +35,11 @@ services:
       - "${HOST_POSTGRES_PORT}:${APP_POSTGRES_PORT}"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.3
