@@ -42,7 +42,9 @@ test:
 local:
 	bash -c '\
 	  set -o allexport; source $(ENV_FILE); set +o allexport; \
-	  export APP_POSTGRES_HOST=localhost APP_KAFKA_BROKERS=localhost:9092; \
+	  export APP_POSTGRES_HOST=localhost \
+	  		 APP_POSTGRES_PORT=$$HOST_POSTGRES_PORT \
+	  		 APP_KAFKA_BROKERS=localhost:9092; \
 	  go run $(MAIN_FILE) \
 	'
 ## Запускает golangci-lint

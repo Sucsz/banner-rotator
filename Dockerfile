@@ -7,6 +7,7 @@ ENV GODEBUG=netdns=go
 
 WORKDIR /app
 
+
 # Кэшируем зависимости
 COPY go.mod go.sum ./
 RUN go mod download
@@ -22,11 +23,16 @@ RUN go build -tags netgo \
 # ─── Финальный минимальный образ ─────────────────────────────────────────────
 FROM scratch
 
+WORKDIR /app
+
 # Копируем бинарник из builder-стадии
-COPY --from=builder /app/banner-rotator /banner-rotator
+COPY --from=builder /app/banner-rotator /app/banner-rotator
+
+# Копируем SQL‑миграции из builder-стадии
+COPY --from=builder /app/internal/db/migrations /app/internal/db/migrations
 
 # Документируем порт (пробросит compose)
 EXPOSE 8080
 
 # Запуск приложения
-ENTRYPOINT ["/banner-rotator"]
+ENTRYPOINT ["/app/banner-rotator"]
