@@ -19,3 +19,6 @@ kafka:
   brokers:
     - "kafka:9092"       # внутри Docker — адрес брокера
   topic: "banner-events" # Kafka-топик для событий баннера
+
+#  Algorithms
+epsilon: 0.1

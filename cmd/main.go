@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/Sucsz/banner-rotator/config"
+	"github.com/Sucsz/banner-rotator/internal/db/dao"
 	"github.com/Sucsz/banner-rotator/internal/db/migrator"
 	"github.com/Sucsz/banner-rotator/internal/kafka"
 	"github.com/Sucsz/banner-rotator/internal/log"
+	"github.com/Sucsz/banner-rotator/internal/service/bandit"
 	"github.com/Sucsz/banner-rotator/pkg/postgres"
 	"os"
 	"time"
@@ -71,4 +73,16 @@ func main() {
 				Msg("Failed to close Kafka producer")
 		}
 	}()
+
+	// 7) Инициализируем DAO-слой
+	statDAO := dao.NewStatDAO(conn)
+	slotDAO := dao.NewBannerSlotDAO(conn)
+
+	// 8) Создаём ε‑greedy селектор из конфига
+	selector := bandit.NewBandit(
+		bandit.Config{Epsilon: cfg.Epsilon},
+		statDAO, slotDAO,
+	)
+	_ = selector // TODO: передать selector в HTTP‑handlers для /show и /click
+
 }
