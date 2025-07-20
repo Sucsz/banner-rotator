@@ -31,6 +31,7 @@ type Config struct {
 	Postgres PostgresConfig `mapstructure:"postgres"`
 	Kafka    KafkaConfig    `mapstructure:"kafka"`
 	LogLevel string         `mapstructure:"log_level"`
+	Epsilon  float64        `mapstructure:"epsilon"`
 }
 
 // LoadConfig загружает конфигурацию: сначала defaults и файл, затем ENV-override
@@ -49,6 +50,8 @@ func LoadConfig() (*Config, error) {
 
 	viper.SetDefault("kafka.brokers", []string{"kafka:9092"})
 	viper.SetDefault("kafka.topic", "banner-events")
+
+	viper.SetDefault("epsilon", 0.1)
 
 	// 2) Чтение файла конфигурации (приоритет над defaults)
 	viper.AddConfigPath("config")
