@@ -51,10 +51,7 @@ func NewEpsilonGreedyWithRND(
 
 // Select выбирает баннер для показа: с вероятностью eps — случайный (explore),
 // иначе — лучший по CTR (exploit). После выбора инкрементит показ.
-func (s *Service) Select(
-	ctx context.Context,
-	slotID, groupID int64,
-) (bannerID int64, err error) {
+func (s *Service) Select(ctx context.Context, slotID, groupID int64) (bannerID int64, err error) {
 	// 1) Получаем список баннеров
 	ids, err := s.slotDAO.GetBannersBySlot(ctx, slotID)
 	if err != nil {

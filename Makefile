@@ -62,5 +62,14 @@ help:
 			help = "" \
 		}' Makefile
 
+## Интеграционные смок-тесты на основные хендлеры апи
+smoke:
+	./tests/http/smoke.sh
+
+## Запуск всех юнит-тестов
+test:
+	go test ./... -v
+
+
 
 .PHONY: run stop restart logs build test lint help
