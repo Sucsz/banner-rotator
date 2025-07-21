@@ -10,6 +10,7 @@ import (
 // BannerSelector выбирает баннер и сразу инкрементит показ.
 type BannerSelector interface {
 	Select(ctx context.Context, slotID, groupID int64) (bannerID int64, err error)
+	RecordClick(ctx context.Context, slotID, bannerID, groupID int64) error
 }
 
 // Config параметры алгоритма.

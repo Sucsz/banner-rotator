@@ -52,7 +52,7 @@ services:
       - "${HOST_ZOOKEEPER_PORT}:${APP_ZOOKEEPER_PORT}"
 
   kafka:
-    image: confluentinc/cp-kafka:8.0.0
+    image: confluentinc/cp-kafka:7.5.3
     container_name: banner-kafka
     depends_on:
       - zookeeper
