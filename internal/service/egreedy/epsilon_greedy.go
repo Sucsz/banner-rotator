@@ -1,3 +1,4 @@
+// Package egreedy реализует алгоритм ε‑жадного выбора баннеров.
 package egreedy
 
 import (
@@ -20,6 +21,8 @@ type Service struct {
 }
 
 // NewEpsilonGreedy создаёт Service с генератором, засеянным текущим UnixNano.
+//
+//nolint:gosec
 func NewEpsilonGreedy(
 	eps float64,
 	statDAO dao.StatDAO,

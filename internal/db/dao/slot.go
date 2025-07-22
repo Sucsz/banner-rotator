@@ -1,3 +1,4 @@
+//nolint:dupl
 package dao
 
 import (
@@ -10,7 +11,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-// SlotDAO — интерфейс для работы с таблицей slots
+// SlotDAO — интерфейс для работы с таблицей slots.
 type SlotDAO interface {
 	Create(ctx context.Context, slot *model.Slot) (int64, error)
 	GetByID(ctx context.Context, id int64) (*model.Slot, error)
@@ -24,12 +25,12 @@ type slotDAO struct {
 	conn *pgx.Conn
 }
 
-// NewSlotDAO создаёт экземпляр slotDAO в виде интерфейса SlotDAO
+// NewSlotDAO создаёт экземпляр slotDAO в виде интерфейса SlotDAO.
 func NewSlotDAO(conn *pgx.Conn) SlotDAO {
 	return &slotDAO{conn: conn}
 }
 
-// Create вставляет новую запись и возвращает её ID
+// Create вставляет новую запись и возвращает её ID.
 func (d *slotDAO) Create(ctx context.Context, slot *model.Slot) (int64, error) {
 	var id int64
 	now := time.Now()
@@ -44,7 +45,7 @@ func (d *slotDAO) Create(ctx context.Context, slot *model.Slot) (int64, error) {
 	return id, nil
 }
 
-// GetByID возвращает слот по ID, исключая soft-deleted
+// GetByID возвращает слот по ID, исключая soft-deleted.
 func (d *slotDAO) GetByID(ctx context.Context, id int64) (*model.Slot, error) {
 	row := d.conn.QueryRow(ctx, `
         SELECT id, description, created_at, updated_at, deleted_at
@@ -69,7 +70,7 @@ func (d *slotDAO) GetByID(ctx context.Context, id int64) (*model.Slot, error) {
 	return &s, nil
 }
 
-// List возвращает все не soft-deleted слоты
+// List возвращает все не soft-deleted слоты.
 func (d *slotDAO) List(ctx context.Context) ([]model.Slot, error) {
 	rows, err := d.conn.Query(ctx, `
         SELECT id, description, created_at, updated_at, deleted_at
@@ -99,7 +100,7 @@ func (d *slotDAO) List(ctx context.Context) ([]model.Slot, error) {
 	return out, nil
 }
 
-// Delete физически удаляет запись
+// Delete физически удаляет запись.
 func (d *slotDAO) Delete(ctx context.Context, id int64) error {
 	cmd, err := d.conn.Exec(ctx, `DELETE FROM slots WHERE id = $1`, id)
 	if err != nil {
@@ -111,7 +112,7 @@ func (d *slotDAO) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-// SoftDelete выставляет DeletedAt = now() для метки удаления
+// SoftDelete выставляет DeletedAt = now() для метки удаления.
 func (d *slotDAO) SoftDelete(ctx context.Context, id int64) error {
 	cmd, err := d.conn.Exec(ctx, `
         UPDATE slots
@@ -127,7 +128,7 @@ func (d *slotDAO) SoftDelete(ctx context.Context, id int64) error {
 	return nil
 }
 
-// Update обновляет описание и UpdatedAt
+// Update обновляет описание и UpdatedAt.
 func (d *slotDAO) Update(ctx context.Context, slot *model.Slot) error {
 	cmd, err := d.conn.Exec(ctx, `
         UPDATE slots

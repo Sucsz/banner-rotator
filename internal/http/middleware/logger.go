@@ -1,3 +1,4 @@
+// Package middleware содержит кастомные middleware
 package middleware
 
 import (
@@ -9,7 +10,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-// logEntry реализует chimw.LogEntry
+// logEntry реализует chimw.LogEntry.
 type logEntry struct {
 	logger zerolog.Logger
 }
@@ -20,6 +21,8 @@ func (e *logEntry) Write(
 	elapsed time.Duration,
 	_ interface{}, // extra не используется
 ) {
+	_ = header
+
 	e.logger.Info().
 		Int("status", status).
 		Int("bytes", bytes).
@@ -51,7 +54,7 @@ func (f *formatter) NewLogEntry(r *http.Request) chimw.LogEntry {
 	return &logEntry{logger: logger}
 }
 
-// RequestLogger — middleware для structured access‑логов через zerolog
+// RequestLogger — middleware для structured access‑логов через zerolog.
 func RequestLogger(next http.Handler) http.Handler {
 	return chimw.RequestLogger(&formatter{})(next)
 }

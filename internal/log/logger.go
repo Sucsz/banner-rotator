@@ -1,3 +1,4 @@
+// Package log настроенный zerolog.Logger
 package log
 
 import (

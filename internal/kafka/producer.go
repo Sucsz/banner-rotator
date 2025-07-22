@@ -9,7 +9,7 @@ import (
 	"github.com/segmentio/kafka-go"
 )
 
-// Producer — интерфейс Kafka‑продюсера
+// Producer — интерфейс Kafka‑продюсера.
 type Producer interface {
 	Send(ctx context.Context, event BannerEvent) error
 	Close() error

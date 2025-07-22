@@ -1,3 +1,7 @@
+// Package main — точка входа в сервис Banner‑Rotator.
+// Здесь происходит загрузка конфигурации, инициализация
+// соединений с PostgreSQL и Kafka, настройка HTTP‑маршрутов
+// и запуск сервера.
 package main
 
 import (
@@ -17,6 +21,7 @@ import (
 	"github.com/Sucsz/banner-rotator/pkg/postgres"
 )
 
+//nolint:funlen
 func main() {
 	// 1) Загружаем конфигурацию
 	cfg, err := config.LoadConfig()
@@ -96,7 +101,15 @@ func main() {
 		Str("addr", ":"+cfg.HTTPPort).
 		Msg("Starting HTTP server.")
 
-	if err := http.ListenAndServe(":"+cfg.HTTPPort, router); err != nil {
+	srv := &http.Server{
+		Addr:         ":" + cfg.HTTPPort,
+		Handler:      router,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
+
+	if err := srv.ListenAndServe(); err != nil {
 		logger.Fatal().Err(err).
 			Msg("Failed to start HTTP server.")
 	}

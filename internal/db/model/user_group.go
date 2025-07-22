@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-// UserGroup — соц-демографическая группа пользователей
+// UserGroup — соц-демографическая группа пользователей.
 type UserGroup struct {
 	ID          int64      `db:"id"`
 	Description string     `db:"description"`

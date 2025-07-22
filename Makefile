@@ -2,6 +2,12 @@ BINARY_NAME=banner-rotator
 MAIN_FILE=cmd/main.go
 
 ENV_FILE=.env
+ifneq (,$(wildcard $(ENV_FILE)))
+  include $(ENV_FILE)
+  # Экспортим все ключи из .env в окружение Make
+  export $(shell sed 's/=.*//' $(ENV_FILE))
+endif
+
 DOCKER_COMPOSE=docker compose --env-file $(ENV_FILE)
 
 ## Запускает контейнеры Kafka, PostgreSQL и т.д.
@@ -16,6 +22,13 @@ stop:
 restart:
 	$(MAKE) stop
 	$(MAKE) run
+	@echo "Ensuring Kafka topic '$(APP_KAFKA_TOPIC)' exists…"
+	$(DOCKER_COMPOSE) exec kafka \
+	  kafka-topics --bootstrap-server $(APP_KAFKA_BROKERS) \
+	    --create --if-not-exists \
+	    --topic $(APP_KAFKA_TOPIC) \
+	    --partitions 1 \
+	    --replication-factor 1 || true
 
 ## Пересобирает образ приложения без кэша
 rebuild:
@@ -65,10 +78,6 @@ help:
 ## Интеграционные смок-тесты на основные хендлеры апи
 smoke:
 	./tests/http/smoke.sh
-
-## Запуск всех юнит-тестов
-test:
-	go test ./... -v
 
 
 

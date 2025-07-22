@@ -1,8 +1,10 @@
+// Package model содержит структуры, соответствующие таблицам базы данных,
+// включая Banner, Slot, UserGroup и т.д.
 package model
 
 import "time"
 
-// Banner — рекламный баннер
+// Banner — рекламный баннер.
 type Banner struct {
 	ID          int64      `db:"id"`
 	Title       string     `db:"title"`

@@ -1,3 +1,4 @@
+// Package config содержит структуры для чтения .env и флагов.
 package config
 
 import (
@@ -8,7 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// PostgresConfig описывает настройки подключения к PostgreSQL
+// PostgresConfig описывает настройки подключения к PostgreSQL.
 type PostgresConfig struct {
 	Host     string        `mapstructure:"host"`
 	Port     int           `mapstructure:"port"`
@@ -19,13 +20,13 @@ type PostgresConfig struct {
 	Timeout  time.Duration `mapstructure:"timeout"`
 }
 
-// KafkaConfig описывает параметры подключения к Kafka
+// KafkaConfig описывает параметры подключения к Kafka.
 type KafkaConfig struct {
 	Brokers []string `mapstructure:"brokers"`
 	Topic   string   `mapstructure:"topic"`
 }
 
-// Config основная структура конфигурации приложения
+// Config основная структура конфигурации приложения.
 type Config struct {
 	HTTPPort string         `mapstructure:"http_port"`
 	Postgres PostgresConfig `mapstructure:"postgres"`
@@ -34,7 +35,7 @@ type Config struct {
 	Epsilon  float64        `mapstructure:"epsilon"`
 }
 
-// LoadConfig загружает конфигурацию: сначала defaults и файл, затем ENV-override
+// LoadConfig загружает конфигурацию: сначала defaults и файл, затем ENV-override.
 func LoadConfig() (*Config, error) {
 	// 1) Значения по умолчанию
 	viper.SetDefault("http_port", "8080")

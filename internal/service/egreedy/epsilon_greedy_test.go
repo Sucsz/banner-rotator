@@ -1,3 +1,4 @@
+//nolint:revive
 package egreedy_test
 
 import (
@@ -65,6 +66,7 @@ func (f *fakeStatDAO) IncrementClick(ctx context.Context, slotID, bannerID, grou
 	return nil
 }
 
+//nolint:gosec
 func TestSelect_Explore(t *testing.T) {
 	ctx := context.Background()
 	banners := []int64{1, 2, 3}
@@ -93,6 +95,7 @@ func TestSelect_Explore(t *testing.T) {
 	assert.Len(t, statDAO.viewCalls, tries)
 }
 
+//nolint:gosec
 func TestSelect_Exploit(t *testing.T) {
 	ctx := context.Background()
 	banners := []int64{10, 20, 30}

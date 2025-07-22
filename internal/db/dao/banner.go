@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-// BannerDAO — интерфейс для работы с таблицей banners
+// BannerDAO — интерфейс для работы с таблицей banners.
 type BannerDAO interface {
 	Create(ctx context.Context, banner *model.Banner) (int64, error)
 	GetByID(ctx context.Context, id int64) (*model.Banner, error)
@@ -24,12 +24,12 @@ type bannerDAO struct {
 	conn *pgx.Conn
 }
 
-// NewBannerDAO создаёт экземпляр bannerDAO в виде интерфейса BannerDAO
+// NewBannerDAO создаёт экземпляр bannerDAO в виде интерфейса BannerDAO.
 func NewBannerDAO(conn *pgx.Conn) BannerDAO {
 	return &bannerDAO{conn: conn}
 }
 
-// Create вставляет новую запись и возвращает её ID
+// Create вставляет новую запись и возвращает её ID.
 func (d *bannerDAO) Create(ctx context.Context, banner *model.Banner) (int64, error) {
 	var id int64
 	now := time.Now()
@@ -44,7 +44,7 @@ func (d *bannerDAO) Create(ctx context.Context, banner *model.Banner) (int64, er
 	return id, nil
 }
 
-// GetByID возвращает баннер по ID, исключая soft-deleted
+// GetByID возвращает баннер по ID, исключая soft-deleted.
 func (d *bannerDAO) GetByID(ctx context.Context, id int64) (*model.Banner, error) {
 	row := d.conn.QueryRow(ctx, `
         SELECT id, title, content, description, created_at, updated_at, deleted_at
@@ -71,7 +71,7 @@ func (d *bannerDAO) GetByID(ctx context.Context, id int64) (*model.Banner, error
 	return &b, nil
 }
 
-// List возвращает все не soft-deleted баннеры
+// List возвращает все не soft-deleted баннеры.
 func (d *bannerDAO) List(ctx context.Context) ([]model.Banner, error) {
 	rows, err := d.conn.Query(ctx, `
         SELECT id, title, content, description, created_at, updated_at, deleted_at
@@ -103,7 +103,7 @@ func (d *bannerDAO) List(ctx context.Context) ([]model.Banner, error) {
 	return out, nil
 }
 
-// Delete физически удаляет запись
+// Delete физически удаляет запись.
 func (d *bannerDAO) Delete(ctx context.Context, id int64) error {
 	cmd, err := d.conn.Exec(ctx, `
         DELETE FROM banners
@@ -118,7 +118,7 @@ func (d *bannerDAO) Delete(ctx context.Context, id int64) error {
 	return nil
 }
 
-// SoftDelete выставляет DeletedAt = now() для метки удаления
+// SoftDelete выставляет DeletedAt = now() для метки удаления.
 func (d *bannerDAO) SoftDelete(ctx context.Context, id int64) error {
 	cmd, err := d.conn.Exec(ctx, `
         UPDATE banners
@@ -134,7 +134,7 @@ func (d *bannerDAO) SoftDelete(ctx context.Context, id int64) error {
 	return nil
 }
 
-// Update обновляет заголовок, контент, описание и UpdatedAt
+// Update обновляет заголовок, контент, описание и UpdatedAt.
 func (d *bannerDAO) Update(ctx context.Context, banner *model.Banner) error {
 	cmd, err := d.conn.Exec(ctx, `
         UPDATE banners

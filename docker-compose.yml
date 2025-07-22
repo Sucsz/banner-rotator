@@ -6,7 +6,7 @@ services:
       postgres:
         condition: service_healthy
       kafka:
-        condition: service_started
+        condition: service_healthy
     command: ["./banner-rotator"]
     environment:
       - APP_HTTP_PORT=${APP_HTTP_PORT}
@@ -64,6 +64,11 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     ports:
       - "${HOST_KAFKA_PORT}:${APP_KAFKA_PORT}"
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "kafka-topics --bootstrap-server localhost:${APP_KAFKA_PORT} --list" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 volumes:
   pgdata:
