@@ -19,12 +19,12 @@ type statDAO struct {
 	conn *pgx.Conn
 }
 
-// NewStatDAO создаёт экземпляр statDAO в виде интерфейса StatDAO
+// NewStatDAO создаёт экземпляр statDAO в виде интерфейса StatDAO.
 func NewStatDAO(conn *pgx.Conn) StatDAO {
 	return &statDAO{conn: conn}
 }
 
-// IncrementView прибавляет 1 к полю impressions, либо создаёт запись
+// IncrementView прибавляет 1 к полю impressions, либо создаёт запись.
 func (d *statDAO) IncrementView(ctx context.Context, slotID, bannerID, groupID int64) error {
 	_, err := d.conn.Exec(ctx, `
         INSERT INTO banner_stats (banner_id, slot_id, user_group_id, impressions, clicks, created_at, updated_at)
@@ -39,7 +39,7 @@ func (d *statDAO) IncrementView(ctx context.Context, slotID, bannerID, groupID i
 	return nil
 }
 
-// IncrementClick прибавляет 1 к полю clicks, либо создаёт запись
+// IncrementClick прибавляет 1 к полю clicks, либо создаёт запись.
 func (d *statDAO) IncrementClick(ctx context.Context, slotID, bannerID, groupID int64) error {
 	_, err := d.conn.Exec(ctx, `
         INSERT INTO banner_stats (banner_id, slot_id, user_group_id, impressions, clicks, created_at, updated_at)
@@ -54,7 +54,7 @@ func (d *statDAO) IncrementClick(ctx context.Context, slotID, bannerID, groupID 
 	return nil
 }
 
-// Get возвращает агрегированную статистику по тройке ключей
+// Get возвращает агрегированную статистику по тройке ключей.
 func (d *statDAO) Get(ctx context.Context, slotID, bannerID, groupID int64) (*model.BannerStat, error) {
 	row := d.conn.QueryRow(ctx, `
         SELECT banner_id, slot_id, user_group_id, impressions, clicks, created_at, updated_at

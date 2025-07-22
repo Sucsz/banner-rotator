@@ -1,3 +1,5 @@
+// Package postgres предоставляет обёртку над подключением к PostgreSQL,
+// миграции и утилиты для работы с БД.
 package postgres
 
 import (

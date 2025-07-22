@@ -9,6 +9,7 @@ import (
 	apimw "github.com/Sucsz/banner-rotator/internal/http/middleware"
 )
 
+// NewRouter создаёт и возвращает HTTP-маршрутизатор с middleware.
 func NewRouter(api *API) http.Handler {
 	r := chi.NewRouter()
 

@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-// Slot — место на сайте, где показываем баннеры
+// Slot — место на сайте, где показываем баннеры.
 type Slot struct {
 	ID          int64      `db:"id"`
 	Description string     `db:"description"`

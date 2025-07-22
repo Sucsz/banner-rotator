@@ -1,16 +1,19 @@
+// Package kafka содержит константы и утилиты для работы с событиями Kafka.
 package kafka
 
 import "time"
 
-// EventType — тип события (клик или показ)
+// EventType — тип события (клик или показ).
 type EventType string
 
 const (
+	// EventClick — тип события “клик” для Kafka.
 	EventClick EventType = "click"
-	EventView  EventType = "view"
+	// EventView — тип события “просмотр” для Kafka.
+	EventView EventType = "view"
 )
 
-// BannerEvent — структура события для Kafka
+// BannerEvent — структура события для Kafka.
 type BannerEvent struct {
 	Type        EventType `json:"type"`
 	SlotID      int64     `json:"slot_id"`

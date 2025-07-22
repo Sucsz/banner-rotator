@@ -12,7 +12,7 @@ import (
 	"github.com/Sucsz/banner-rotator/internal/log"
 )
 
-// AddBanner — POST /slots/{slot_id}/banners
+// AddBanner — POST /slots/{slot_id}/banners.
 func (a *API) AddBanner(w http.ResponseWriter, r *http.Request) {
 	logger := log.WithComponent("api.AddBanner")
 
@@ -39,7 +39,7 @@ func (a *API) AddBanner(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// RemoveBanner — DELETE /slots/{slot_id}/banners/{banner_id}
+// RemoveBanner — DELETE /slots/{slot_id}/banners/{banner_id}.
 func (a *API) RemoveBanner(w http.ResponseWriter, r *http.Request) {
 	logger := log.WithComponent("api.RemoveBanner")
 
@@ -63,7 +63,7 @@ func (a *API) RemoveBanner(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// ShowBanner — POST /slots/{slot_id}/show
+// ShowBanner — POST /slots/{slot_id}/show.
 func (a *API) ShowBanner(w http.ResponseWriter, r *http.Request) {
 	logger := log.WithComponent("api.ShowBanner")
 
@@ -110,7 +110,7 @@ func (a *API) ShowBanner(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// ClickBanner — POST /slots/{slot_id}/click
+// ClickBanner — POST /slots/{slot_id}/click.
 func (a *API) ClickBanner(w http.ResponseWriter, r *http.Request) {
 	logger := log.WithComponent("api.ClickBanner")
 

@@ -1,0 +1,108 @@
+version: 2
+
+run:
+  tests: true
+  timeout: 5m
+  build-tags: []
+
+linters-settings:
+  funlen:
+    lines: 150
+    statements: 80
+
+  depguard:
+    rules:
+      Main:
+        files:
+          - $all
+          - "!$test"
+        allow:
+          - $gostd
+          # Разрешаем все подпакеты вашего проекта
+          - github.com/Sucsz/banner-rotator
+          - github.com/Sucsz/banner-rotator/*
+          - github.com/Sucsz/banner-rotator/**/*
+
+          # Разрешаем все внешние зависимости, которые используются в проекте
+          - github.com/spf13/viper
+          - github.com/go-chi/chi
+          - github.com/go-chi/chi/*
+          - github.com/jackc/pgx
+          - github.com/jackc/pgx/*
+          - github.com/pressly/goose
+          - github.com/pressly/goose/*
+          - github.com/segmentio/kafka-go
+          - github.com/rs/zerolog
+          - github.com/rs/zerolog/*
+
+      Test:
+        files:
+          - $test
+        allow:
+          - $gostd
+          - github.com/stretchr/testify
+          - github.com/stretchr/testify/*
+
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - errcheck
+        - dupl
+        - gocyclo
+        - gosec
+
+linters:
+  disable-all: true
+  enable:
+    - asciicheck
+# - depguard не смог разрешить импорты, причины понять не могу
+    - dogsled
+    - dupl
+    - bodyclose
+    - durationcheck
+    - errorlint
+    - exhaustive
+    - copyloopvar
+    - funlen
+# - gci больше не линтер, теперь форматтер
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - godot
+#  - gofmt больше не линтер, теперь форматтер
+#  - gofumpt больше не линтер, теперь форматтер
+    - goheader
+    - goprintffuncname
+    - gosec
+# - gosimple теперь часть staticcheck
+    - govet
+    - importas
+    - ineffassign
+    - lll
+    - makezero
+    - misspell
+    - nestif
+    - nilerr
+    - noctx
+    - nolintlint
+    - prealloc
+    - predeclared
+    - revive
+    - staticcheck
+# - stylecheck теперь часть staticcheck
+#    - tagliatelle
+    - thelper
+# - typecheck больше не линтер, базовая настройка
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+format:
+  formatters:
+    enable:
+      - gofumpt
+      - gci
+      - gofmt

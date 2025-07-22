@@ -1,3 +1,5 @@
+// Package bandit реализует алгоритмы «multi-armed bandit»
+// (например UCB, ε‑жадность) для выбора баннеров.
 package bandit
 
 import (

@@ -19,12 +19,12 @@ type bannerSlotDAO struct {
 	conn *pgx.Conn
 }
 
-// NewBannerSlotDAO создаёт экземпляр bannerSlotDAO в виде интерфейса BannerSlotDAO
+// NewBannerSlotDAO создаёт экземпляр bannerSlotDAO в виде интерфейса BannerSlotDAO.
 func NewBannerSlotDAO(conn *pgx.Conn) BannerSlotDAO {
 	return &bannerSlotDAO{conn: conn}
 }
 
-// AddBannerToSlot связывает баннер и слот
+// AddBannerToSlot связывает баннер и слот.
 func (d *bannerSlotDAO) AddBannerToSlot(ctx context.Context, bannerID, slotID int64) error {
 	_, err := d.conn.Exec(ctx, `
         INSERT INTO banner_slots (banner_id, slot_id, created_at)
@@ -36,7 +36,7 @@ func (d *bannerSlotDAO) AddBannerToSlot(ctx context.Context, bannerID, slotID in
 	return nil
 }
 
-// RemoveBannerFromSlot удаляет связь баннера и слота
+// RemoveBannerFromSlot удаляет связь баннера и слота.
 func (d *bannerSlotDAO) RemoveBannerFromSlot(ctx context.Context, bannerID, slotID int64) error {
 	cmd, err := d.conn.Exec(ctx, `
         DELETE FROM banner_slots
@@ -51,7 +51,7 @@ func (d *bannerSlotDAO) RemoveBannerFromSlot(ctx context.Context, bannerID, slot
 	return nil
 }
 
-// GetBannersBySlot возвращает список banner_id для заданного slot_id
+// GetBannersBySlot возвращает список banner_id для заданного slot_id.
 func (d *bannerSlotDAO) GetBannersBySlot(ctx context.Context, slotID int64) ([]int64, error) {
 	rows, err := d.conn.Query(ctx, `
         SELECT banner_id
@@ -75,7 +75,7 @@ func (d *bannerSlotDAO) GetBannersBySlot(ctx context.Context, slotID int64) ([]i
 	return ids, nil
 }
 
-// IsBannerInSlot проверяет, связаны ли баннер и слот
+// IsBannerInSlot проверяет, связаны ли баннер и слот.
 func (d *bannerSlotDAO) IsBannerInSlot(ctx context.Context, bannerID, slotID int64) (bool, error) {
 	var exists bool
 	err := d.conn.QueryRow(ctx, `
